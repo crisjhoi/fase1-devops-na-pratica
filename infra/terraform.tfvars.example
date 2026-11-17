@@ -8,7 +8,7 @@ instance_type = "t3.micro"
 app_port      = 3000
 
 # troque pelo link do SEU repositório depois de criar no GitHub
-repo_url = "https://github.com/SEU-USUARIO/fase1-devops-na-pratica.git"
+repo_url = "https://github.com/crisjhoi/fase1-devops-na-pratica.git"
 
 # no AWS Academy (Learner Lab) descomente a linha abaixo:
 # instance_profile = "LabInstanceProfile"

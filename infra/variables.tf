@@ -28,7 +28,7 @@ variable "app_port" {
 variable "repo_url" {
   description = "URL do repositorio Git que a maquina vai clonar pra rodar a API"
   type        = string
-  default     = "https://github.com/SEU-USUARIO/fase1-devops-na-pratica.git"
+  default     = "https://github.com/crisjhoi/fase1-devops-na-pratica.git"
 }
 
 variable "key_name" {

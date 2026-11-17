@@ -4,8 +4,7 @@
 **Fase:** 1 — Configuração e Automação Inicial
 **Estudante:** Joyce Cristina do Nascimento Souza
 
-> **Repositório do projeto:** https://github.com/SEU-USUARIO/fase1-devops-na-pratica
-> *(troque pelo link do seu repositório depois de criar no GitHub)*
+> **Repositório do projeto:** https://github.com/crisjhoi/fase1-devops-na-pratica
 
 ---
 
