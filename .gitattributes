@@ -1,0 +1,5 @@
+# Deixo o git normalizar os finais de linha sozinho.
+# O detalhe importante é o *.sh: ele PRECISA ficar com LF, senão o script
+# de user-data quebra quando rodar na máquina Linux lá na AWS.
+* text=auto
+*.sh text eol=lf

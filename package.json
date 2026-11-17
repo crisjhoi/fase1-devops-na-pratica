@@ -1,0 +1,25 @@
+{
+  "name": "fase1-devops-na-pratica",
+  "version": "1.0.0",
+  "description": "API de Tarefas usada como projeto da Fase 1 da disciplina DevOps na Prática",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest --runInBand"
+  },
+  "keywords": [
+    "devops",
+    "ci",
+    "api",
+    "node"
+  ],
+  "author": "Joyce Cristina do Nascimento Souza",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}

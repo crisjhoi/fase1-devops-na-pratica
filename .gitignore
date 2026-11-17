@@ -1,0 +1,18 @@
+# dependências do node (não quero mandar isso pro git, é pesado e dá pra reinstalar)
+node_modules/
+
+# logs e arquivos de sistema
+*.log
+.DS_Store
+
+# arquivos do terraform que NÃO podem ir pro git
+# (o tfstate guarda infos da infra e às vezes segredos, então fica de fora)
+infra/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+
+# variáveis de ambiente
+.env
