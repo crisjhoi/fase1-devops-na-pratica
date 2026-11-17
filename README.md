@@ -1,6 +1,6 @@
 # Fase 1 — DevOps na Prática
 
-Projeto que eu desenvolvi na primeira fase da disciplina **DevOps na Prática**.
+Projeto da primeira fase da disciplina **DevOps na Prática**.
 A proposta aqui é montar a base de automação: um pipeline de Integração Contínua (CI)
 e os scripts de Infraestrutura como Código (IaC).
 
@@ -52,9 +52,9 @@ Pra criar uma tarefa, mando um JSON assim:
 
 ---
 
-## Como rodar na minha máquina
+## Como rodar na máquina
 
-Preciso ter o [Node.js](https://nodejs.org) instalado (versão 18 ou mais nova).
+Precisa ter o [Node.js](https://nodejs.org) instalado (versão 18 ou mais nova).
 
 ```bash
 # instala as dependências
@@ -64,7 +64,7 @@ npm install
 npm start
 ```
 
-Pra testar se está funcionando, abro no navegador: `http://localhost:3000/health`
+Pra testar se está funcionando, abre no navegador: `http://localhost:3000/health`
 
 ---
 
@@ -81,7 +81,7 @@ Os testes usam **Jest** + **Supertest** e cobrem todas as rotas da API
 
 ## Integração Contínua (CI)
 
-Toda vez que eu dou `push` ou abro um Pull Request pra branch `main`, o
+Toda vez que der `push` ou abrir um Pull Request pra branch `main`, o
 **GitHub Actions** roda o pipeline automaticamente (olha o arquivo
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml)). Ele faz duas coisas:
 
@@ -89,7 +89,7 @@ Toda vez que eu dou `push` ou abro um Pull Request pra branch `main`, o
    dependências e roda `npm test`.
 2. **Validar Terraform** — confere a formatação e valida os scripts de infra.
 
-Se qualquer coisa falhar, o pipeline fica vermelho e eu já descubro na hora,
+Se qualquer coisa falhar, o pipeline fica vermelho e já descubre na hora,
 antes de subir qualquer coisa pra produção.
 
 ---
