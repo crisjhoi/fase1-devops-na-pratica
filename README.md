@@ -47,7 +47,7 @@ fase1-devops-na-pratica/
 Pra criar uma tarefa, mando um JSON assim:
 
 ```json
-{ "titulo": "Estudar pra prova de DevOps" }
+{ "titulo": "Estudar" }
 ```
 
 ---
@@ -112,9 +112,3 @@ terraform apply     # cria a infra de verdade
 ```
 
 No final, o Terraform mostra a URL da API já pronta pra abrir no navegador.
-
-> Pra destruir tudo e não gastar crédito à toa: `terraform destroy`
-
----
-
-Feito por **Joyce Cristina do Nascimento Souza**.
