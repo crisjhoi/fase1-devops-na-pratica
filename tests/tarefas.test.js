@@ -1,7 +1,4 @@
-// Testes automatizados da API.
-// Uso o supertest pra "fingir" que estou fazendo requisições HTTP na app,
-// sem precisar subir servidor de verdade. Cada teste cria a app do zero,
-// então um teste não suja o outro (importante porque as tarefas ficam na memória).
+// testes das rotas da API com supertest (sem subir servidor de verdade).
 
 const request = require("supertest");
 const { criarApp } = require("../src/app");
@@ -9,7 +6,7 @@ const { criarApp } = require("../src/app");
 describe("API de Tarefas", () => {
   let app;
 
-  // antes de cada teste eu começo com uma app limpinha
+  // app nova a cada teste (as tarefas ficam em memória)
   beforeEach(() => {
     app = criarApp();
   });
@@ -47,10 +44,8 @@ describe("API de Tarefas", () => {
   });
 
   test("GET /tarefas/:id deve devolver a tarefa que eu criei", async () => {
-    // primeiro crio uma tarefa...
     await request(app).post("/tarefas").send({ titulo: "Comprar café" });
 
-    // ...depois busco ela pelo id
     const resposta = await request(app).get("/tarefas/1");
 
     expect(resposta.status).toBe(200);
@@ -69,7 +64,6 @@ describe("API de Tarefas", () => {
     const delecao = await request(app).delete("/tarefas/1");
     expect(delecao.status).toBe(204);
 
-    // conferindo que ela sumiu mesmo
     const busca = await request(app).get("/tarefas/1");
     expect(busca.status).toBe(404);
   });

@@ -1,7 +1,5 @@
 #!/bin/bash
-# Esse script roda automático quando a máquina EC2 liga pela primeira vez.
-# A graça é essa: eu não preciso entrar na máquina e configurar nada na mão,
-# ela mesma instala o Node, baixa o código e já deixa a API no ar.
+# roda quando a EC2 liga: instala o Node, baixa o código e sobe a API sozinha.
 
 set -e
 
@@ -9,18 +7,17 @@ set -e
 dnf update -y
 dnf install -y git
 
-# instala o Node 20 pelo repositório oficial da NodeSource
+# instala o Node 20 (NodeSource)
 curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
 dnf install -y nodejs
 
-# baixa o projeto e instala só as dependências de produção
+# baixa o projeto e instala as dependências de produção
 cd /opt
 git clone ${repo_url} app
 cd /opt/app
 npm ci --omit=dev
 
-# crio um serviço do systemd pra API subir sozinha no boot
-# e se por acaso ela cair, o systemd reinicia (Restart=always).
+# serviço systemd pra API subir no boot e reiniciar se cair
 cat > /etc/systemd/system/api-tarefas.service <<'UNIT'
 [Unit]
 Description=API de Tarefas - DevOps na Pratica
@@ -37,7 +34,7 @@ User=root
 WantedBy=multi-user.target
 UNIT
 
-# liga o serviço agora e deixa ele habilitado pros próximos boots
+# habilita e inicia o serviço
 systemctl daemon-reload
 systemctl enable api-tarefas
 systemctl start api-tarefas

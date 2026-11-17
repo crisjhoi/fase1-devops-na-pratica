@@ -1,45 +1,42 @@
-// Aqui é onde eu monto a aplicação em si (o Express).
-// Separei a "app" do "server" de propósito: assim nos testes eu consigo
-// importar só a app e testar as rotas sem precisar subir uma porta de verdade.
+// aplicação Express com as rotas da API.
+// separo app e server pra conseguir testar as rotas sem subir uma porta.
 
 const express = require("express");
 
 function criarApp() {
   const app = express();
 
-  // deixo o express entender JSON no corpo das requisições
+  // lê JSON do corpo das requisições
   app.use(express.json());
 
-  // vou guardar as tarefas aqui na memória mesmo.
-  // é só um projeto da faculdade, então não precisa de banco de dados ainda.
+  // tarefas guardadas em memória
   let tarefas = [];
   let proximoId = 1;
 
-  // rota de saúde -> uso ela depois pra checar se a API tá de pé lá na AWS
+  // checa se a API está no ar
   app.get("/health", (req, res) => {
     res.json({ status: "ok", horario: new Date().toISOString() });
   });
 
-  // lista todas as tarefas
+  // lista as tarefas
   app.get("/tarefas", (req, res) => {
     res.json(tarefas);
   });
 
-  // pega uma tarefa específica pelo id
+  // busca uma tarefa pelo id
   app.get("/tarefas/:id", (req, res) => {
     const tarefa = tarefas.find((t) => t.id === Number(req.params.id));
     if (!tarefa) {
-      // se não achou, devolvo 404 pra deixar claro que esse id não existe
       return res.status(404).json({ erro: "tarefa não encontrada" });
     }
     res.json(tarefa);
   });
 
-  // cria uma tarefa nova
+  // cria uma tarefa
   app.post("/tarefas", (req, res) => {
     const { titulo } = req.body || {};
 
-    // não deixo criar tarefa sem título, senão fica sem sentido
+    // título é obrigatório
     if (!titulo || titulo.trim() === "") {
       return res.status(400).json({ erro: "o campo 'titulo' é obrigatório" });
     }
@@ -51,7 +48,6 @@ function criarApp() {
     };
 
     tarefas.push(novaTarefa);
-    // 201 = criado com sucesso
     res.status(201).json(novaTarefa);
   });
 
@@ -65,7 +61,6 @@ function criarApp() {
     }
 
     tarefas = tarefas.filter((t) => t.id !== id);
-    // 204 = deu certo e não tenho nada pra devolver no corpo
     res.status(204).send();
   });
 

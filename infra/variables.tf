@@ -1,5 +1,4 @@
-# Essas são as "configurações" da infra. Deixei tudo como variável pra não
-# ter nada chumbado no código e conseguir mudar sem mexer no main.tf.
+# variáveis da infra (nada chumbado no main.tf)
 
 variable "aws_region" {
   description = "Regiao da AWS onde a infra vai subir"
@@ -14,7 +13,7 @@ variable "project_name" {
 }
 
 variable "instance_type" {
-  description = "Tamanho da maquina EC2 (no Academy o t3.micro ja resolve)"
+  description = "Tipo da maquina EC2 (t3.micro no Academy)"
   type        = string
   default     = "t3.micro"
 }
@@ -44,7 +43,7 @@ variable "instance_profile" {
 }
 
 variable "allowed_ssh_cidr" {
-  description = "Faixa de IP liberada pra SSH. O ideal e colocar so o meu IP/32."
+  description = "Faixa de IP liberada pra SSH (ideal restringir a um /32)"
   type        = string
   default     = "0.0.0.0/0"
 }

@@ -1,5 +1,4 @@
-# Depois que o Terraform aplica, ele me mostra esses valores no terminal.
-# Assim eu já pego o endereço da API pronto pra testar no navegador.
+# valores que o terraform mostra no final (endereço da API etc.)
 
 output "ip_publico" {
   description = "IP publico da maquina"

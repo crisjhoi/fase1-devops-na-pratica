@@ -1,10 +1,8 @@
-// Esse arquivo é só o "liga a API numa porta e deixa escutando".
-// Quem tem a lógica das rotas é o app.js.
+// sobe a API numa porta. as rotas estão no app.js.
 
 const { criarApp } = require("./app");
 
-// uso variável de ambiente pra porta porque lá na nuvem pode ser outra.
-// se não vier nada, cai no 3000 mesmo.
+// porta vem da variável de ambiente; sem ela, usa 3000
 const PORTA = process.env.PORT || 3000;
 
 const app = criarApp();

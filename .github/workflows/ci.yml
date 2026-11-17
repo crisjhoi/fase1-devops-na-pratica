@@ -1,11 +1,7 @@
-# Esse é o pipeline de Integração Contínua (CI).
-# A ideia: toda vez que eu dou push ou abro um pull request pra branch main,
-# o GitHub Actions roda os testes sozinho e também valida os scripts do Terraform.
-# Se algo quebrar, eu já vejo aqui antes de mandar pra nuvem.
+# pipeline de CI: a cada push/PR na main, roda os testes e valida o Terraform.
 
 name: CI
 
-# quando esse pipeline dispara
 on:
   push:
     branches: ["main"]
@@ -13,37 +9,32 @@ on:
     branches: ["main"]
 
 jobs:
-  # ---- Job 1: roda os testes automatizados da API ----
+  # testes da API (em duas versões do Node)
   testes:
     name: Testes da aplicação
     runs-on: ubuntu-latest
 
-    # testo em mais de uma versão do Node pra garantir que funciona nas duas
     strategy:
       matrix:
         node-version: ["18.x", "20.x"]
 
     steps:
-      # 1) baixa o código do repositório pra dentro da máquina do Actions
       - name: Baixar o código
         uses: actions/checkout@v4
 
-      # 2) instala o Node na versão da vez
       - name: Instalar o Node ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
-      # 3) instala as dependências de forma limpa (usa o package-lock)
       - name: Instalar dependências
         run: npm ci
 
-      # 4) finalmente roda os testes
       - name: Rodar os testes
         run: npm test
 
-  # ---- Job 2: valida os scripts de Infraestrutura como Código ----
+  # valida os scripts de infra
   infra:
     name: Validar Terraform
     runs-on: ubuntu-latest
@@ -52,21 +43,17 @@ jobs:
       - name: Baixar o código
         uses: actions/checkout@v4
 
-      # instala o terraform na máquina do Actions
       - name: Instalar o Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # confere se os arquivos .tf estão formatados do jeito certo
       - name: Checar formatação
         run: terraform fmt -check -recursive
         working-directory: ./infra
 
-      # inicializa sem backend (não preciso de conta AWS só pra validar)
       - name: Inicializar
         run: terraform init -backend=false
         working-directory: ./infra
 
-      # valida se a sintaxe e as referências do Terraform estão corretas
       - name: Validar
         run: terraform validate
         working-directory: ./infra

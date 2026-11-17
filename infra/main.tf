@@ -1,5 +1,4 @@
-# Aqui é o "coração" da infraestrutura: é o que vai subir a máquina na AWS
-# pra hospedar a API. Escrevi pensando no ambiente do AWS Academy (Learner Lab).
+# infraestrutura na AWS pra hospedar a API (pensado pro AWS Academy).
 
 terraform {
   required_version = ">= 1.5.0"
@@ -12,19 +11,17 @@ terraform {
   }
 }
 
-# provedor = AWS. A região vem de uma variável (no Academy costuma ser us-east-1).
+# provedor AWS; região vem de variável
 provider "aws" {
   region = var.aws_region
 }
 
-# Em vez de criar uma VPC do zero, uso a VPC padrão que a conta já tem.
-# No Learner Lab isso facilita bastante e evita erro de permissão.
+# usa a VPC padrão da conta (evita erro de permissão no Learner Lab)
 data "aws_vpc" "default" {
   default = true
 }
 
-# Pego a imagem mais recente do Amazon Linux 2023 (assim não chumbo um ID de AMI,
-# que muda de região pra região e fica velho com o tempo).
+# pega a AMI mais recente do Amazon Linux 2023 (sem chumbar um ID)
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
@@ -35,14 +32,13 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-# Grupo de segurança = o "firewall" da máquina.
-# Libero a porta da aplicação e a 22 (SSH) pra eu conseguir acessar se precisar.
+# grupo de segurança = firewall da máquina
 resource "aws_security_group" "api" {
   name        = "${var.project_name}-sg"
   description = "Libera as portas que a API precisa"
   vpc_id      = data.aws_vpc.default.id
 
-  # porta da API (onde o Node vai escutar)
+  # porta da API
   ingress {
     description = "Acesso HTTP a API"
     from_port   = var.app_port
@@ -51,8 +47,7 @@ resource "aws_security_group" "api" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # SSH pra eu entrar na máquina se eu precisar depurar algo.
-  # OBS pra mim: em produção de verdade eu restringiria isso só pro meu IP.
+  # SSH (ideal restringir a faixa num cenário real)
   ingress {
     description = "Acesso SSH"
     from_port   = 22
@@ -61,7 +56,7 @@ resource "aws_security_group" "api" {
     cidr_blocks = [var.allowed_ssh_cidr]
   }
 
-  # saída liberada pra tudo (a máquina precisa baixar o node, as libs, etc.)
+  # saída liberada
   egress {
     description = "Saida liberada"
     from_port   = 0
@@ -76,19 +71,17 @@ resource "aws_security_group" "api" {
   }
 }
 
-# A máquina em si (EC2). Quando ela liga, roda o script de user-data,
-# que instala o Node e deixa a API no ar sozinha.
+# máquina EC2; ao ligar, roda o user-data que sobe a API
 resource "aws_instance" "api" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.api.id]
   key_name               = var.key_name != "" ? var.key_name : null
 
-  # no AWS Academy a gente precisa usar o perfil "LabInstanceProfile".
-  # deixei como variável: se vier vazio, o Terraform ignora.
+  # perfil IAM (no Academy, LabInstanceProfile); vazio = ignora
   iam_instance_profile = var.instance_profile != "" ? var.instance_profile : null
 
-  # esse templatefile injeta a URL do repositório e a porta dentro do script
+  # injeta o repo e a porta no script de user-data
   user_data = templatefile("${path.module}/scripts/user-data.sh", {
     repo_url = var.repo_url
     app_port = var.app_port
